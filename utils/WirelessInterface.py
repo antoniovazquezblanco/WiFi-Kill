@@ -1,9 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 from subprocess import Popen, PIPE
 from scapy.all import *
 from subprocess import call
+
+
+DEVNULL = open(os.devnull, 'w')
 
 
 class WirelessInterface:
@@ -32,7 +36,7 @@ class WirelessInterface:
     @staticmethod
     def get_interfaces():
 	# TODO: Pipe stderr to /dev/null in Popen...
-        process = Popen(['iwconfig'], stdout=PIPE)
+        process = Popen(['iwconfig'], stdout=PIPE, stderr=DEVNULL)
         interface = ''
         mac = ''
         interface_list = []
