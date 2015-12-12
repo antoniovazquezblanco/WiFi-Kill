@@ -33,8 +33,9 @@ class WiFiKill:
         end_iter = self.log_text_buff.get_end_iter()
         self.log_text_buff.insert(end_iter, text)
 
-    @staticmethod
-    def on_destroy(*args):
+    def on_destroy(self, *args):
+	self.log_append("[+] Stopping sniffer...\n")
+        self.sniffer_thread.stop()
         Gtk.main_quit(*args)
 
     def window_main_toolbar_interfaces_update_clicked(self, button):
