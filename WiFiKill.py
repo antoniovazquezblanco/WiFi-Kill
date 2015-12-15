@@ -10,6 +10,10 @@ from utils import Sniffer
 
 class WiFiKill:
 	def __init__(self):
+		self.window_splash = self.SplashScreen()
+		# Heavy initialization code ahead...
+		import time
+		time.sleep(5)
 		self.builder = Gtk.Builder()
 		self.builder.add_from_file("WiFiKill.glade")
 		self.builder.connect_signals(self)
@@ -22,6 +26,7 @@ class WiFiKill:
 
 	def loop(self):
 		self.window.show_all()
+		self.window_splash.destroy()
 		Gtk.main()
 
 	def interfaces_clear(self):
@@ -64,6 +69,40 @@ class WiFiKill:
 
 	def window_main_notebook_interfaces_monitor_stop_clicked(self, button):
 		print("[+] TODO: Implement monitor stop...\n")
+
+	class SplashScreen:
+		def __init__(self):
+			# Create an undecorated window...
+			self.window = Gtk.Window(Gtk.WindowType.TOPLEVEL)
+			self.window.set_title('WiFi Kill')
+			self.window.set_position(Gtk.WindowPosition.CENTER)
+			self.window.set_decorated(False)
+			self.window.add(Gtk.Image.new_from_file('resources/splash.png'))
+			# Transparent background...
+			self.window.set_app_paintable(True)
+			screen = self.window.get_screen()
+			visual = screen.get_rgba_visual()
+			if visual != None and screen.is_composited():
+				self.window.set_visual(visual)
+			# Show the window and render it...
+			# TODO: It seems like the window gets created but it doesn't render until y click on it and call main_iteration after it... It needs fixing...
+			self.window.show_all()
+			while Gtk.events_pending():
+				Gtk.main_iteration()
+			self.window.present()
+			self.window.grab_focus()
+			self.window.set_keep_above(True)
+			self.window.set_accept_focus(True)
+			self.window.present()
+			while Gtk.events_pending():
+				Gtk.main_iteration()
+			#import time
+			#time.sleep(19)
+			while Gtk.events_pending():
+				Gtk.main_iteration()
+
+		def destroy(self):
+			self.window.destroy()
 
 
 if __name__ == "__main__":
