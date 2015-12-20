@@ -27,5 +27,6 @@ class SystemChecks:
 	@staticmethod
 	def __check_binaries():
 		print("[D] SystemChecks.__check_binaries(): TODO: Implement!")
+		# TODO: Is ifconfig present?
 		# TODO: Is iwconfig present? -> sudo apt-get install wireless-tools
-		# TODO: WTF? iwconfig in debian is in /sbin/iwconfig and not in path...
+		# TODO: WTF? iwconfig and ifconfig in debian is in /sbin/ and not in path...

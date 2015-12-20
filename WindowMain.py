@@ -52,16 +52,17 @@ class WindowMain:
 		self.sniffer_thread.start()
 
 	def window_main_notebook_interfaces_randomize_mac_clicked(self, button):
-		self.log_append("[+] TODO: Implement MAC randomization...\n")
+		self.log_append("[+] Randomizing MAC address...\n")
 		# Get the selected rows
 		model, paths = self.interface_treeview.get_selection().get_selected_rows()
 		for path in paths:
 			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).mac_randomize()
 		self.window_main_toolbar_interfaces_update_clicked(button)
-		print("[!] TODO: Show dialog if no interface is selected...")
+		print("[D] WindowMain.window_main_notebook_interfaces_randomize_mac_clicked(): TODO: Show dialog if no interface is selected...")
 
 	def window_main_notebook_interfaces_monitor_start_clicked(self, button):
-		print("[!] TODO: Implement monitor start...\n")
+		print("[D] WindowMain.window_main_notebook_interfaces_monitor_start_clicked() :TODO: Implement monitor start...\n")
 
 	def window_main_notebook_interfaces_monitor_stop_clicked(self, button):
-		print("[+] TODO: Implement monitor stop...\n")
+		print("[D] WindowMain.window_main_notebook_interfaces_monitor_stop_clicked() TODO: Implement monitor stop...\n")
+
