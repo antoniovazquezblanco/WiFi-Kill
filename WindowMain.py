@@ -4,8 +4,8 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from utils import WirelessInterface
-from utils import Sniffer
+from utils.WirelessInterface import WirelessInterface
+from utils.Sniffer import Sniffer
 
 
 class WindowMain:

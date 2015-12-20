@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
 
-from utils import SystemChecks
+from utils.SystemChecks import SystemChecks
 
 
 class WindowSplash:
