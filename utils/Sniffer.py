@@ -40,7 +40,7 @@ class Sniffer():
 				print("[D] AP MAC: %s SSID: %s " % (pkt.addr2, pkt.info))
 		print("[!] Sniffer.__callback_packet(): TODO: Implement!")
 
-	def __callback_stop(self):
+	def __callback_stop(self, param):
 		print("[D] Sniffer: "+str(self.__active))
-		return self.__active
+		return not self.__active
 
