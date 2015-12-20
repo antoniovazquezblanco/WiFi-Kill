@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
-
+import os
 class SystemChecks:
 	@staticmethod
 	def pre_test():
@@ -16,8 +16,8 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_root():		
-		# TODO: Are we root? -> If not show a dialog and raise an exception...
-		print("[D] SystemChecks.__check_root(): TODO: Implement!")
+		if os.geteuid() != 0:
+			raise Exception("[E] SystemChecks.__check_root(): No root access")
 
 	@staticmethod
 	def __check_modules():
