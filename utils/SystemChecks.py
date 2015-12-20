@@ -16,9 +16,8 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_root():		
-		if os.geteuid() != 0:# TODO: Are we root? -> If not show a dialog and raise an exception...
-			print("[E] SystemChecks.__check_root(): No root access")
-			raise Exception 
+		if os.geteuid() != 0:
+			raise Exception("[E] SystemChecks.__check_root(): No root access")
 
 	@staticmethod
 	def __check_modules():
