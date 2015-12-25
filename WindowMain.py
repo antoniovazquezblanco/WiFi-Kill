@@ -74,7 +74,7 @@ class WindowMain:
 		# Get the selected rows
 		model, paths = self.interface_treeview.get_selection().get_selected_rows()
 		for path in paths:
-			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).change_mode("Monitor")
+			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).change_mode("Managed")
 		self.window_main_toolbar_interfaces_update_clicked(button)
 		print("[D] WindowMain.window_main_notebook_interfaces_monitor_stop_clicked(): TODO: Show dialog if no interface is selected...")
 
