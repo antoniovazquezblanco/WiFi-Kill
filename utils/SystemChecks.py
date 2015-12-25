@@ -1,11 +1,19 @@
 #!/usr/bin/python2
 # -*- coding: utf-8 -*-
+
 import os
+import subprocess
+
+
 class SystemChecks:
 	@staticmethod
 	def pre_test():
-		print("[D] SystemChecks.pre_test(): TODO: Implement!")
-		# TODO: Chek if GTK is installed...
+		try:
+			import gi
+			gi.require_version('Gtk', '3.0')
+			from gi.repository import Gtk
+		except:
+			raise Exception("[!] Error: This program requires python Gtk+ 3.0 installed!")
 
 	@staticmethod
 	def post_test():
@@ -17,16 +25,23 @@ class SystemChecks:
 	@staticmethod
 	def __check_root():		
 		if os.geteuid() != 0:
-			raise Exception("[E] SystemChecks.__check_root(): No root access")
+			raise Exception("No elevated permissions. Please run as root.")
 
 	@staticmethod
 	def __check_modules():
-		# TODO: Is scapy installed?
-		print("[D] SystemChecks.__check_modules(): TODO: Implement!")
+		try:
+			import scapy.all
+		except:
+			raise Exception("This program requires scapy python modules. Please install them.")
 
 	@staticmethod
 	def __check_binaries():
-		print("[D] SystemChecks.__check_binaries(): TODO: Implement!")
-		# TODO: Is ifconfig present?
-		# TODO: Is iwconfig present? -> sudo apt-get install wireless-tools
-		# TODO: WTF? iwconfig and ifconfig in debian is in /sbin/ and not in path...
+		if not SystemChecks.__check_cmd("ifconfig"):
+			raise Exception("Could not locate \"ifconfig\" executable, please install or add to path.")
+		if not SystemChecks.__check_cmd("iwconfig"):
+			raise Exception("Could not locate \"iwconfig\" executable, please install or add to path.")
+		print("[D] SystemChecks.__check_binaries(): TODO: iwconfig and ifconfig in debian is in /sbin/ and not in path...")
+
+	@staticmethod
+	def __check_cmd(cmd):
+		return subprocess.call("type " + cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
