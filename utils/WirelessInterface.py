@@ -28,7 +28,7 @@ class WirelessInterface:
 	def get_as_tuple(self):
 		return self.name, self.mac, self.mode
 
-	def mac_randomize(self):
+	def randomize_mac(self):
 		random.seed()
 		new_mac = self.mac[:8]
 		for i in xrange(0, 6):
@@ -37,6 +37,11 @@ class WirelessInterface:
 			new_mac += '0123456789ABCDEF'[random.randint(0, 15)]
 		call(['ifconfig', self.name, 'down'])
 		call(['ifconfig', self.name, 'hw', 'ether', new_mac])
+		call(['ifconfig', self.name, 'up'])
+
+	def change_mode(self, mode):
+		call(['ifconfig', self.name, 'down'])
+		call(['iwconfig', self.name, 'mode', mode])
 		call(['ifconfig', self.name, 'up'])
 
 	@staticmethod
@@ -57,12 +62,19 @@ class WirelessInterface:
 					mac = mac.replace('-', ':')
 				if len(mac) > 17:
 					mac = mac[0:17]
-		else:					# New ifconfig...
+		elif output.find('ether') != -1:	# New ifconfig...
 			for line in output.split('\n'):
 				if line.find('ether') != -1:
 					for word in line.split(' '):
 						if word != '' and word.find(':') != -1:
 							mac = word.upper()
+							break
+		else:					# New ifconfig in monitor mode...
+			for line in output.split('\n'):
+				if line.find('unspec') != -1:
+					for word in line.split(' '):
+						if word != '' and word.find('-') != -1:
+							mac = word.replace('-', ':').upper()[0:17]
 							break
 		interface.set_mac(mac)
 		# Get interface mode...

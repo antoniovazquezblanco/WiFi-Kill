@@ -56,13 +56,25 @@ class WindowMain:
 		# Get the selected rows
 		model, paths = self.interface_treeview.get_selection().get_selected_rows()
 		for path in paths:
-			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).mac_randomize()
+			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).randomize_mac()
 		self.window_main_toolbar_interfaces_update_clicked(button)
 		print("[D] WindowMain.window_main_notebook_interfaces_randomize_mac_clicked(): TODO: Show dialog if no interface is selected...")
 
 	def window_main_notebook_interfaces_monitor_start_clicked(self, button):
-		print("[D] WindowMain.window_main_notebook_interfaces_monitor_start_clicked() :TODO: Implement monitor start...\n")
+		self.log_append("[+] Putting interfaces in monitor mode...\n")
+		# Get the selected rows
+		model, paths = self.interface_treeview.get_selection().get_selected_rows()
+		for path in paths:
+			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).change_mode("Monitor")
+		self.window_main_toolbar_interfaces_update_clicked(button)
+		print("[D] WindowMain.window_main_notebook_interfaces_monitor_start_clicked(): TODO: Show dialog if no interface is selected...")
 
 	def window_main_notebook_interfaces_monitor_stop_clicked(self, button):
-		print("[D] WindowMain.window_main_notebook_interfaces_monitor_stop_clicked() TODO: Implement monitor stop...\n")
+		self.log_append("[+] Putting interfaces in managed mode...\n")
+		# Get the selected rows
+		model, paths = self.interface_treeview.get_selection().get_selected_rows()
+		for path in paths:
+			WirelessInterface.get_from_name(model.get(model.get_iter(path), 0)[0]).change_mode("Monitor")
+		self.window_main_toolbar_interfaces_update_clicked(button)
+		print("[D] WindowMain.window_main_notebook_interfaces_monitor_stop_clicked(): TODO: Show dialog if no interface is selected...")
 
