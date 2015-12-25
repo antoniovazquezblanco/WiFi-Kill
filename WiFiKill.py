@@ -3,6 +3,7 @@
 
 from utils.SystemChecks import SystemChecks
 
+
 if __name__ == "__main__":
 	# Check if the most basic stuff in order to show a window is present...
 	SystemChecks.pre_test()
