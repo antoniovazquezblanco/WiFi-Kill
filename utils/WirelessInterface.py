@@ -25,6 +25,9 @@ class WirelessInterface:
 	def set_mode(self, mode):
 		self.mode = mode
 
+	def get_mode(self):
+		return self.mode
+
 	def get_as_tuple(self):
 		return self.name, self.mac, self.mode
 
