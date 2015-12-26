@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import threading
+from utils.WirelessInterface import WirelessInterface
 from scapy.all import *
 from scapy.layers.dot11 import Dot11
 
@@ -30,17 +31,25 @@ class Sniffer():
 		return False
 
 	def __sniff(self):
+		interfaces = WirelessInterface.get_interfaces()
+		mon = False
+		for i in interfaces:
+			if i.get_mode() == "Monitor":
+				mon = True
+		if not mon:
+			print("[!] Sniffer.__sniff(): No monitor interfaces, show dialog...")
+			return
 		sniff(prn=self.__callback_packet, stop_filter=self.__callback_stop)
 
 	def __callback_packet(self, pkt):
+		print("[D] Pkt")
 		if pkt.haslayer(Dot11):
+			print("[D] Dot11")
 			if pkt.type == 0 and pkt.subtype == 8:
 				# if pkt.addr2 not in ap_list :
 					# ap_list.append(pkt.addr2)
 				print("[D] AP MAC: %s SSID: %s " % (pkt.addr2, pkt.info))
-		print("[!] Sniffer.__callback_packet(): TODO: Implement!")
 
 	def __callback_stop(self, param):
-		print("[D] Sniffer: "+str(self.__active))
 		return not self.__active
 
