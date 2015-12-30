@@ -42,7 +42,7 @@ class Sniffer():
 		sniff(prn=self.__callback_packet, stop_filter=self.__callback_stop)
 
 	def __callback_packet(self, pkt):
-		print("[D] Pkt")
+		print("[D] Pkt: "+pkt.summary())
 		if pkt.haslayer(Dot11):
 			print("[D] Dot11")
 			if pkt.type == 0 and pkt.subtype == 8:
