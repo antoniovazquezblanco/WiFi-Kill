@@ -20,6 +20,7 @@ class SystemChecks:
 		SystemChecks.__check_root()
 		SystemChecks.__check_modules()
 		SystemChecks.__check_binaries()
+		SystemChecks.__check_services()
 		
 
 	@staticmethod
@@ -43,5 +44,18 @@ class SystemChecks:
 		print("[D] SystemChecks.__check_binaries(): TODO: iwconfig and ifconfig in debian is in /sbin/ and not in path...")
 
 	@staticmethod
+	def __check_services():
+		if not SystemChecks.__check_service("NetworkManager"):
+			raise Exception("\"NetworkManager\" service is running and may interfere with the program.")
+
+	@staticmethod
 	def __check_cmd(cmd):
 		return subprocess.call("type " + cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
+
+	@staticmethod
+	def __check_service(serv):
+		process = subprocess.Popen(['systemctl', 'status', serv+".service"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		process.wait()
+		output = process.communicate()[0]
+		return output.find('running') == -1
+
