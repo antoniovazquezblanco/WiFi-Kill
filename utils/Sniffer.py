@@ -3,13 +3,14 @@
 
 import threading
 from utils.WirelessInterface import WirelessInterface
+from utils.AccessPoint import AccessPoint
 from scapy.all import *
 from scapy.layers.dot11 import Dot11
 
 
 class Sniffer():
 	def __init__(self):
-		self.list_ap = []
+		self.list_ap = {}
 		self.__active = False
 		self.__thread = None
 
@@ -30,6 +31,9 @@ class Sniffer():
 			return True
 		return False
 
+	def get_networks(self):
+		return self.list_ap.values()
+
 	def __sniff(self):
 		interfaces = WirelessInterface.get_interfaces()
 		mon = False
@@ -42,13 +46,13 @@ class Sniffer():
 		sniff(prn=self.__callback_packet, stop_filter=self.__callback_stop)
 
 	def __callback_packet(self, pkt):
-		print("[D] Pkt: "+pkt.summary())
 		if pkt.haslayer(Dot11):
-			print("[D] Dot11")
 			if pkt.type == 0 and pkt.subtype == 8:
-				# if pkt.addr2 not in ap_list :
-					# ap_list.append(pkt.addr2)
-				print("[D] AP MAC: %s SSID: %s " % (pkt.addr2, pkt.info))
+				if not pkt.addr2 in self.list_ap:
+					self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
+				self.list_ap[pkt.addr2].set_ssid(pkt.info)
+				self.list_ap[pkt.addr2].incr_pkts()
+				print("[D] Pkt: "+pkt.summary())
 
 	def __callback_stop(self, param):
 		return not self.__active

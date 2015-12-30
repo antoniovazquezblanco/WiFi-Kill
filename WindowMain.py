@@ -18,6 +18,7 @@ class WindowMain:
 		self.log_text_buff = self.log_text.get_buffer()
 		self.interface_treeview = self.builder.get_object("window_main_notebook_interfaces_treeview")
 		self.interface_liststore = self.builder.get_object("window_main_liststore_interfaces")
+		self.networks_liststore = self.builder.get_object("window_main_liststore_networks")
 		self.sniffer_thread = Sniffer()
 		self.__loop()
 
@@ -30,6 +31,12 @@ class WindowMain:
 
 	def interface_append(self, interface):
 		self.interface_liststore.append(interface)
+
+	def networks_clear(self):
+		self.networks_liststore.clear()
+
+	def networks_append(self, interface):
+		self.networks_liststore.append(interface)
 
 	def log_append(self, text):
 		end_iter = self.log_text_buff.get_end_iter()
@@ -50,6 +57,12 @@ class WindowMain:
 	def window_main_toolbar_scan_clicked(self, button):
 		self.log_append("[+] Starting sniffer...\n")
 		self.sniffer_thread.start()
+
+	def window_main_toolbar_networks_update_clicked(self, button):
+		nets = self.sniffer_thread.get_networks()
+		self.networks_clear()
+		for n in nets:
+			self.networks_append(n.get_as_tuple())
 
 	def window_main_notebook_interfaces_randomize_mac_clicked(self, button):
 		self.log_append("[+] Randomizing MAC address...\n")
