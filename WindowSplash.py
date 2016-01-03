@@ -8,6 +8,9 @@ from utils.SystemChecks import SystemChecks
 import threading
 import os
 import signal
+from Queue import Queue
+import sys
+import time
 
 
 class WindowSplash(Gtk.Window):
@@ -17,24 +20,33 @@ class WindowSplash(Gtk.Window):
 		self.set_position(Gtk.WindowPosition.CENTER)
 		# TODO: Add an image to the splash screen...
 		self.show_all()
-		t = threading.Thread(target=self.__initialize)
+		q = Queue()
+		t = threading.Thread(target=self.__initialize, args=(q,))
 		t.start()
 		Gtk.main()
 		t.join()
+		if not q.empty():
+			t = q.get()
+			d = WindowSplash.ErrorDialog(self, t)
+			d.run()
+			d.destroy()
+			raise Exception(t)
 		self.destroy()
 
-	def __initialize(self):
+	def __initialize(self, q):
+		time.sleep(0.1)
 		try:
 			SystemChecks.post_test()
 		except Exception as e:
-			print("[!] Error: " + str(e))
-			# TODO: Interrupt in a clean way!
-			os.kill(os.getpid(), signal.SIGKILL)
+			q.put(str(e))
 		Gtk.main_quit()
 
-	# TODO: Show a dialog on error and lock thread until a button is pressed and then exit the program
-	#class ErrorDialog(Gtk.MessageDialog):
-	#	def __init__(self, msg):
-	#		Gtk.MessageDialog.__init__(self, type=Gtk.MessageType.ERROR, buttons=Gtk.ButtonsType.OK)
-	#		self.set_markup(msg)
-	#		self.run()
+	class ErrorDialog(Gtk.Dialog):
+		def __init__(self, parent, error):
+			Gtk.Dialog.__init__(self, "Error", parent, 0, (Gtk.STOCK_OK, Gtk.ResponseType.OK))
+			self.set_default_size(150, 100)
+			label = Gtk.Label(str(error))
+			box = self.get_content_area()
+			box.add(label)
+			self.show_all()
+
