@@ -11,6 +11,7 @@ import signal
 from Queue import Queue
 import sys
 import time
+import traceback
 
 
 class WindowSplash(Gtk.Window):
@@ -26,11 +27,12 @@ class WindowSplash(Gtk.Window):
 		Gtk.main()
 		t.join()
 		if not q.empty():
-			t = q.get()
-			d = WindowSplash.ErrorDialog(self, t)
+			e, tb = q.get()
+			d = WindowSplash.ErrorDialog(self, e, tb)
 			d.run()
 			d.destroy()
-			raise Exception(t)
+			print(tb)
+			raise e
 		self.destroy()
 
 	def __initialize(self, q):
@@ -38,15 +40,20 @@ class WindowSplash(Gtk.Window):
 		try:
 			SystemChecks.post_test()
 		except Exception as e:
-			q.put(str(e))
+			q.put((e, traceback.format_exc()))
 		Gtk.main_quit()
 
 	class ErrorDialog(Gtk.Dialog):
-		def __init__(self, parent, error):
+		def __init__(self, parent, error, traceback):
 			Gtk.Dialog.__init__(self, "Error", parent, 0, (Gtk.STOCK_OK, Gtk.ResponseType.OK))
 			self.set_default_size(150, 100)
-			label = Gtk.Label(str(error))
 			box = self.get_content_area()
+			label = Gtk.Label(str(error))
 			box.add(label)
+			expander = Gtk.Expander()
+			expander.set_label("Traceback")
+			label_tb = Gtk.Label(str(traceback))
+			expander.add(label_tb)
+			box.add(expander)
 			self.show_all()
 
