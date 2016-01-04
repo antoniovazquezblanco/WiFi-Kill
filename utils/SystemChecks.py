@@ -45,8 +45,10 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_services():
-		if not SystemChecks.__check_service("NetworkManager"):
-			raise Exception("\"NetworkManager\" service is running and may interfere with the program.")
+		service_list = ['NetworkManager', 'avahi-daemon']
+		for s in service_list:
+			if not SystemChecks.__check_service(s):
+				raise Exception("\""+s+"\" service is running and may interfere with the program.")
 
 	@staticmethod
 	def __check_cmd(cmd):
