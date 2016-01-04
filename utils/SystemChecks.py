@@ -54,8 +54,11 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_service(serv):
-		process = subprocess.Popen(['systemctl', 'status', serv+".service"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-		process.wait()
-		output = process.communicate()[0]
-		return output.find('running') == -1
+		if SystemChecks.__check_cmd("systemctl"):
+			# Systemctl is present...
+			process = subprocess.Popen(['systemctl', 'status', serv+".service"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			process.wait()
+			output = process.communicate()[0]
+			return output.find('running') == -1
+		return True
 
