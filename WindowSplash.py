@@ -20,7 +20,6 @@ class WindowSplash(Gtk.Window):
 		self.set_decorated(False)
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.set_default_size(640, 500)#Esto creo que no es necesario
-		# TODO: Add an image to the splash screen...
 		logo = Gtk.Image.new_from_file('resources/logo.png')
 		self.add(logo)
 		self.show_all()
