@@ -67,15 +67,17 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_processes():
-		processes_to_check = ("wpa_supplicant","wpa_action","wpa_cli","dhclient","ifplugd","dhcdbd","dhcpcd","udhcpc","avahi-autoipd","avahi-daemon","wlassistant","wifibox")
-		processes = subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0]
-		processes = processes.split('\n')
-		nfields = len(processes[0].split()) - 1
+		processes_list = ["wpa_supplicant","wpa_action","wpa_cli","dhclient","ifplugd","dhcdbd","dhcpcd","udhcpc","avahi-autoipd","avahi-daemon","wlassistant","wifibox"]
 		processes_detected=[]
-		for i in range(len(processes)-1):
-			processes_line=processes[i].split(None, nfields)
-			for j in range(len(processes_to_check)-1):
-				if processes_to_check[j] in processes_line[nfields]:
-					processes_detected.append(processes_to_check[j])
+		for process in processes_list:
+				check=SystemChecks.__check_process(process)
+				if check != None:
+					processes_detected.append(process)
 		if processes_detected:
 			raise Exception(str(processes_detected) + " processes are running and may interfere with the program.")
+	@staticmethod
+	def __check_process(process):
+		processes = subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0].split('\n')
+		for processes_line in processes:
+			if process in processes_line:
+				return -1
