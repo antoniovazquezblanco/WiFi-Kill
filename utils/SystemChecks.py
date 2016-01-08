@@ -22,10 +22,9 @@ class SystemChecks:
 		SystemChecks.__check_binaries()
 		SystemChecks.__check_services()
 		SystemChecks.__check_processes()
-		
 
 	@staticmethod
-	def __check_root():		
+	def __check_root():
 		if os.geteuid() != 0:
 			raise Exception("No elevated permissions. Please run as root.")
 
@@ -38,32 +37,44 @@ class SystemChecks:
 
 	@staticmethod
 	def __check_binaries():
-		if not SystemChecks.__check_cmd("ifconfig"):
-			raise Exception("Could not locate \"ifconfig\" executable, please install or add to path.")
-		if not SystemChecks.__check_cmd("iwconfig"):
-			raise Exception("Could not locate \"iwconfig\" executable, please install or add to path.")
+		binaries = ['ifconfig', 'iwconfig']
+		for b in binaries:
+			if not SystemChecks.__check_cmd(b):
+				raise Exception("Could not locate \""+b+"\" executable, please install or add to path.")
 		print("[D] SystemChecks.__check_binaries(): TODO: iwconfig and ifconfig in debian is in /sbin/ and not in path...")
-
-	@staticmethod
-	def __check_services():
-		service_list = ['NetworkManager', 'avahi-daemon']
-		for s in service_list:
-			if not SystemChecks.__check_service(s):
-				raise Exception("\""+s+"\" service is running and may interfere with the program.")
 
 	@staticmethod
 	def __check_cmd(cmd):
 		return subprocess.call("type " + cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
 
 	@staticmethod
+	def __check_services():
+		service_list = ['NetworkManager', 'avahi-daemon']
+		for s in service_list:
+			if not SystemChecks.__check_service(s):
+				SystemChecks.__stop_service(s)
+		services_running = []
+		for s in service_list:
+			if not SystemChecks.__check_service(s):
+				services_running.append(s)
+		if len(services_running) != 0:
+			raise Exception("The following services are running and may interfere with the program: "+str(services_running))
+
+	@staticmethod
 	def __check_service(serv):
 		if SystemChecks.__check_cmd("systemctl"):
 			# Systemctl is present...
-			process = subprocess.Popen(['systemctl', 'status', serv+".service"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			process = subprocess.Popen(['systemctl', 'status', serv+'.service'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 			process.wait()
 			output = process.communicate()[0]
 			return output.find('running') == -1
 		return True
+
+	@staticmethod
+	def __stop_service(serv):
+		if SystemChecks.__check_cmd("systemctl"):
+			# Systemctl is present...
+			return subprocess.call('systemctl stop ' + serv + '.service', shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
 
 	@staticmethod
 	def __check_processes():
@@ -74,7 +85,10 @@ class SystemChecks:
 				processes_detected.append(process)
 		if processes_detected:
 			raise Exception(str(processes_detected) + " processes are running and may interfere with the program.")
+<<<<<<< HEAD
 	@staticmethod
 	def __check_process(process):
 		return process in subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0]
+=======
+>>>>>>> 62acf0addbf82bd71216f8b28170a2901829d167
 
