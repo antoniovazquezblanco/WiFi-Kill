@@ -70,14 +70,11 @@ class SystemChecks:
 		processes_list = ['wpa_supplicant', 'wpa_action', 'wpa_cli', 'dhclient', 'ifplugd', 'dhcdbd', 'dhcpcd', 'udhcpc', 'avahi-autoipd', 'avahi-daemon', 'wlassistant', 'wifibox']
 		processes_detected=[]
 		for process in processes_list:
-			if SystemChecks.__check_process(process) == True:
+			if SystemChecks.__check_process(process):
 				processes_detected.append(process)
 		if processes_detected:
 			raise Exception(str(processes_detected) + " processes are running and may interfere with the program.")
 	@staticmethod
 	def __check_process(process):
-		processes = subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0].split('\n')
-		for processes_line in processes:
-			if process in processes_line:
-				return True
-		return False
+		return process in subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0]
+
