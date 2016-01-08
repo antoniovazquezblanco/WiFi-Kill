@@ -85,10 +85,8 @@ class SystemChecks:
 				processes_detected.append(process)
 		if processes_detected:
 			raise Exception(str(processes_detected) + " processes are running and may interfere with the program.")
-<<<<<<< HEAD
+
 	@staticmethod
 	def __check_process(process):
 		return process in subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0]
-=======
->>>>>>> 62acf0addbf82bd71216f8b28170a2901829d167
 
