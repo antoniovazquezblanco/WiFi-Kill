@@ -40,14 +40,14 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkToolButton" id="window_main_toolbar_interfaces_update">
+              <object class="GtkToolButton" id="window_main_toolbar_interfaces">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="is_important">True</property>
-                <property name="label" translatable="yes">Update interfaces</property>
+                <property name="label" translatable="yes">Manage interfaces</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-refresh</property>
-                <signal name="clicked" handler="window_main_toolbar_interfaces_update_clicked" swapped="no"/>
+                <property name="stock_id">gtk-execute</property>
+                <signal name="clicked" handler="window_main_toolbar_interfaces_clicked" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -95,134 +95,6 @@
           <object class="GtkNotebook" id="window_main_notebook">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <child>
-              <object class="GtkBox" id="window_main_notebook_interfaces_box">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <object class="GtkScrolledWindow" id="window_main_notebook_interfaces_scrolledwindow">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
-                    <child>
-                      <object class="GtkTreeView" id="window_main_notebook_interfaces_treeview">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="model">window_main_liststore_interfaces</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="window_main_liststore_interfaces_treeview_selection"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="window_main_liststore_interfaces_treeview_col_interface">
-                            <property name="title" translatable="yes">Interface</property>
-                            <property name="expand">True</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="window_main_liststore_interfaces_treeview_col_interface_renderer"/>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="window_main_liststore_interfaces_treeview_col_mac">
-                            <property name="title" translatable="yes">MAC</property>
-                            <property name="expand">True</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="window_main_liststore_interfaces_treeview_col_mac_renderer"/>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="window_main_liststore_interfaces_treeview_col_mode">
-                            <property name="title" translatable="yes">Mode</property>
-                            <property name="expand">True</property>
-                            <child>
-                              <object class="GtkCellRendererText" id="window_main_liststore_interfaces_treeview_col_mode_renderer"/>
-                              <attributes>
-                                <attribute name="text">2</attribute>
-                              </attributes>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="main_window_notebook_interfaces_actions">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkButton" id="main_window_notebook_interfaces_action_randomize_mac">
-                        <property name="label" translatable="yes">Randomize MAC</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="window_main_notebook_interfaces_randomize_mac_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="main_window_notebook_interfaces_action_monitor_start">
-                        <property name="label" translatable="yes">Monitor start</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="window_main_notebook_interfaces_monitor_start_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton" id="main_window_notebook_interfaces_action_monitor_stop">
-                        <property name="label" translatable="yes">Monitor stop</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <signal name="clicked" handler="window_main_notebook_interfaces_monitor_stop_clicked" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-            </child>
-            <child type="tab">
-              <object class="GtkLabel" id="window_main_notebook_interfaces">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Interfaces</property>
-              </object>
-              <packing>
-                <property name="tab_fill">False</property>
-              </packing>
-            </child>
             <child>
               <object class="GtkScrolledWindow" id="window_main_liststore_scrolledwindow">
                 <property name="visible">True</property>
@@ -287,9 +159,6 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child type="tab">
               <object class="GtkLabel" id="window_main_notebook_networks">
@@ -298,7 +167,6 @@
                 <property name="label" translatable="yes">Networks</property>
               </object>
               <packing>
-                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
@@ -315,7 +183,7 @@
                 </child>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child type="tab">
@@ -325,7 +193,7 @@
                 <property name="label" translatable="yes">Log</property>
               </object>
               <packing>
-                <property name="position">2</property>
+                <property name="position">1</property>
                 <property name="tab_fill">False</property>
               </packing>
             </child>
