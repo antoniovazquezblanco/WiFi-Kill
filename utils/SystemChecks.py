@@ -79,7 +79,10 @@ class SystemChecks:
 	@staticmethod
 	def __check_processes():
 		processes_list = ['wpa_supplicant', 'wpa_action', 'wpa_cli', 'dhclient', 'ifplugd', 'dhcdbd', 'dhcpcd', 'udhcpc', 'avahi-autoipd', 'avahi-daemon', 'wlassistant', 'wifibox']
-		processes_detected=[]
+		for p in processes_list:
+			if SystemChecks.__check_process(p):
+				SystemChecks.__stop_process(p)
+		processes_detected = []
 		for process in processes_list:
 			if SystemChecks.__check_process(process):
 				processes_detected.append(process)
@@ -90,3 +93,6 @@ class SystemChecks:
 	def __check_process(process):
 		return process in subprocess.Popen(['ps', 'aux'], stdout=subprocess.PIPE).communicate()[0]
 
+	@staticmethod
+	def __stop_process(process):
+		return subprocess.call("killall " + process, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE) == 0
