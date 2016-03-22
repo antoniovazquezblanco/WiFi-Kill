@@ -61,17 +61,18 @@ class Sniffer():
 	def __callback_packet(self, pkt):
 		if pkt.haslayer(Dot11) and pkt.type == Dot11Fields.Type.Management and pkt.subtype == Dot11Fields.SubType.Beacon:
 			# TODO: Why addr2 instead of addr3????
-			if not pkt.addr2 in self.list_ap:
-				self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
+			addr = pkt.addr2.upper()
+			if not addr in self.list_ap:
+				self.list_ap[addr] = AccessPoint(addr)
 			p = pkt.getlayer(Dot11Elt)
 			while p:
 				if p.ID == Dot11Fields.Elt.SSID:
-					self.list_ap[pkt.addr2].set_ssid(p.info)
+					self.list_ap[addr].set_ssid(p.info)
 				elif p.ID == Dot11Fields.Elt.DSset:
-					self.list_ap[pkt.addr2].set_channel(ord(p.info))
+					self.list_ap[addr].set_channel(ord(p.info))
 				p = p.payload
 				'''
-				    TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+				TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				    crypto = set()
 				    while isinstance(p, Dot11Elt):
 				        elif p.ID == 48:
@@ -84,10 +85,13 @@ class Sniffer():
 				            crypto.add("WEP")
 				        else:
 				            crypto.add("OPN")
+				TODOOOOOOOOO!!!!!!!
+				 - Parse radiotap header for signal strenght information
+				 - WPS??????
 				'''
-			self.list_ap[pkt.addr2].incr_pkts()
-			#pkt.show()
-			#print("------------------------------------------------")
+			self.list_ap[addr].incr_pkts()
+			pkt.show()
+			print("------------------------------------------------")
 
 	def __callback_stop(self, param):
 		return not self.__active
