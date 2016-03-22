@@ -52,6 +52,7 @@ class Sniffer():
 					self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
 				self.list_ap[pkt.addr2].set_ssid(pkt.info)
 				self.list_ap[pkt.addr2].incr_pkts()
+			else:
 				print("[D] Pkt: "+pkt.summary())
 
 	def __callback_stop(self, param):

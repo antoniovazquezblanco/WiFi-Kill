@@ -4,6 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+from gi.repository import GObject
 from DialogInterfaces import DialogInterfaces
 from utils.Sniffer import Sniffer
 
@@ -17,6 +18,7 @@ class WindowMain:
 		self.log_text = self.builder.get_object("window_main_notebook_log_text")
 		self.log_text_buff = self.log_text.get_buffer()
 		self.networks_liststore = self.builder.get_object("window_main_liststore_networks")
+		self.update_callback_id = None
 		self.sniffer_thread = Sniffer()
 		self.__loop()
 
@@ -36,19 +38,22 @@ class WindowMain:
 
 	def on_destroy(self, *args):
 		self.log_append("[+] Stopping sniffer...\n")
+		if self.update_callback_id != None:
+			GObject.source_remove(self.update_callback_id)
 		self.sniffer_thread.stop()
 		Gtk.main_quit(*args)
 
 	def window_main_toolbar_interfaces_clicked(self, button):
 		DialogInterfaces()
 
-	def window_main_toolbar_scan_clicked(self, button):
-		self.log_append("[+] Starting sniffer...\n")
-		self.sniffer_thread.start()
-
-	def window_main_toolbar_networks_update_clicked(self, button):
+	def window_main_networks_update_callback(self):
 		nets = self.sniffer_thread.get_networks()
 		self.networks_clear()
 		for n in nets:
 			self.networks_append(n.get_as_tuple())
+		return True
 
+	def window_main_toolbar_scan_clicked(self, button):
+		self.log_append("[+] Starting sniffer...\n")
+		self.update_callback_id = GObject.timeout_add(1000, self.window_main_networks_update_callback)
+		self.sniffer_thread.start()
