@@ -64,6 +64,7 @@ class Sniffer():
 			addr = pkt.addr2.upper()
 			if not addr in self.list_ap:
 				self.list_ap[addr] = AccessPoint(addr)
+			self.list_ap[addr].incr_pkts()
 			p = pkt.getlayer(Dot11Elt)
 			while p:
 				if p.ID == Dot11Fields.Elt.SSID:
@@ -73,23 +74,18 @@ class Sniffer():
 				p = p.payload
 				'''
 				TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				    crypto = set()
-				    while isinstance(p, Dot11Elt):
-				        elif p.ID == 48:
-				            crypto.add("WPA2")
-				        elif p.ID == 221 and p.info.startswith('\x00P\xf2\x01\x01\x00'):
-				            crypto.add("WPA")
-				        p = p.payload
-				    if not crypto:
-				        if 'privacy' in cap:
-				            crypto.add("WEP")
-				        else:
-				            crypto.add("OPN")
-				TODOOOOOOOOO!!!!!!!
-				 - Parse radiotap header for signal strenght information
+			         - Parse radiotap header for signal strenght information
 				 - WPS??????
+				elif p.ID == 48:
+			            crypto.add("WPA2")
+			        elif p.ID == 221 and p.info.startswith('\x00P\xf2\x01\x01\x00'):
+			            crypto.add("WPA")
+				if not crypto:
+			        	if 'privacy' in cap:
+			        	    crypto.add("WEP")
+			        	else:
+			        	    crypto.add("OPN")
 				'''
-			self.list_ap[addr].incr_pkts()
 			pkt.show()
 			print("------------------------------------------------")
 
