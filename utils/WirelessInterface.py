@@ -47,6 +47,9 @@ class WirelessInterface:
 		call(['iwconfig', self.name, 'mode', mode])
 		call(['ifconfig', self.name, 'up'])
 
+	def change_channel(self, ch):
+		call(['iwconfig', self.name, 'channel', ch])
+
 	@staticmethod
 	def get_from_name(name):
 		interface = WirelessInterface()
