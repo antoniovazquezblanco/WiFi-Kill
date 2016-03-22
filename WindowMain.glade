@@ -88,14 +88,20 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="model">window_main_liststore_networks</property>
+                <property name="reorderable">True</property>
+                <property name="enable_search">False</property>
                 <property name="search_column">0</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="window_main_liststore_networks_col_bssid">
+                    <property name="resizable">True</property>
                     <property name="title" translatable="yes">BSSID</property>
                     <property name="expand">True</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">0</property>
                     <child>
                       <object class="GtkCellRendererText" id="window_main_liststore_networks_col_bssid_renderer"/>
                       <attributes>
@@ -106,8 +112,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="window_main_liststore_networks_col_essid">
+                    <property name="resizable">True</property>
                     <property name="title" translatable="yes">ESSID</property>
                     <property name="expand">True</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">1</property>
                     <child>
                       <object class="GtkCellRendererText" id="window_main_liststore_networks_col_essid_renderer"/>
                       <attributes>
@@ -118,8 +128,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="window_main_liststore_networks_col_channel">
+                    <property name="resizable">True</property>
                     <property name="title" translatable="yes">Channel</property>
                     <property name="expand">True</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">2</property>
                     <child>
                       <object class="GtkCellRendererText" id="window_main_liststore_networks_col_channel_renderer"/>
                       <attributes>
@@ -130,8 +144,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="window_main_liststore_networks_col_npackets">
+                    <property name="resizable">True</property>
                     <property name="title" translatable="yes"># Packets</property>
                     <property name="expand">True</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">3</property>
                     <child>
                       <object class="GtkCellRendererText" id="window_main_liststore_networks_col_npackets_renderer"/>
                       <attributes>
@@ -142,8 +160,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn" id="window_main_liststore_networks_col_power">
+                    <property name="resizable">True</property>
                     <property name="title" translatable="yes">Power</property>
                     <property name="expand">True</property>
+                    <property name="clickable">True</property>
+                    <property name="reorderable">True</property>
+                    <property name="sort_column_id">4</property>
                     <child>
                       <object class="GtkCellRendererText" id="window_main_liststore_networks_col_power_renderer"/>
                       <attributes>
