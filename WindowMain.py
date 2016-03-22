@@ -15,8 +15,6 @@ class WindowMain:
 		self.builder.add_from_file("WindowMain.glade")
 		self.builder.connect_signals(self)
 		self.window = self.builder.get_object("window_main")
-		self.log_text = self.builder.get_object("window_main_notebook_log_text")
-		self.log_text_buff = self.log_text.get_buffer()
 		self.networks_liststore = self.builder.get_object("window_main_liststore_networks")
 		self.update_callback_id = None
 		self.sniffer_thread = Sniffer()

@@ -8,6 +8,19 @@ from scapy.all import *
 from scapy.layers.dot11 import Dot11
 
 
+class Dot11Fields():
+
+	class Type():
+		Management = 0x00
+
+	class SubType():
+		Beacon = 0x08
+
+	class Elt():
+		SSID = 0x00
+		DSset = 0x03
+
+
 class Sniffer():
 	def __init__(self):
 		self.list_ap = {}
@@ -46,14 +59,32 @@ class Sniffer():
 		sniff(prn=self.__callback_packet, stop_filter=self.__callback_stop)
 
 	def __callback_packet(self, pkt):
-		if pkt.haslayer(Dot11):
-			if pkt.type == 0 and pkt.subtype == 8:
-				if not pkt.addr2 in self.list_ap:
-					self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
-				self.list_ap[pkt.addr2].set_ssid(pkt.info)
-				self.list_ap[pkt.addr2].incr_pkts()
-			else:
-				print("[D] Pkt: "+pkt.summary())
+		if pkt.haslayer(Dot11) and pkt.type == Dot11Fields.Type.Management and pkt.subtype == Dot11Fields.SubType.Beacon:
+			# TODO: Why addr2 instead of addr3????
+			if not pkt.addr2 in self.list_ap:
+				self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
+			for p in pkt.getlayer(Dot11Elt):
+				if p.ID == Dot11Fields.Elt.SSID:
+					self.list_ap[pkt.addr2].set_ssid(p.info)
+				elif p.ID == Dot11Fields.Elt.DSset:
+					self.list_ap[pkt.addr2].set_channel(ord(p.info))
+				'''
+				    crypto = set()
+				    while isinstance(p, Dot11Elt):
+				        elif p.ID == 48:
+				            crypto.add("WPA2")
+				        elif p.ID == 221 and p.info.startswith('\x00P\xf2\x01\x01\x00'):
+				            crypto.add("WPA")
+				        p = p.payload
+				    if not crypto:
+				        if 'privacy' in cap:
+				            crypto.add("WEP")
+				        else:
+				            crypto.add("OPN")
+				'''
+			self.list_ap[pkt.addr2].incr_pkts()
+			pkt.show()
+			print("------------------------------------------------")
 
 	def __callback_stop(self, param):
 		return not self.__active
