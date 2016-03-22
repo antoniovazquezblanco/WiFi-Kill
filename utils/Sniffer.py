@@ -63,12 +63,15 @@ class Sniffer():
 			# TODO: Why addr2 instead of addr3????
 			if not pkt.addr2 in self.list_ap:
 				self.list_ap[pkt.addr2] = AccessPoint(pkt.addr2)
-			for p in pkt.getlayer(Dot11Elt):
+			p = pkt.getlayer(Dot11Elt)
+			while p:
 				if p.ID == Dot11Fields.Elt.SSID:
 					self.list_ap[pkt.addr2].set_ssid(p.info)
 				elif p.ID == Dot11Fields.Elt.DSset:
 					self.list_ap[pkt.addr2].set_channel(ord(p.info))
+				p = p.payload
 				'''
+				    TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				    crypto = set()
 				    while isinstance(p, Dot11Elt):
 				        elif p.ID == 48:
@@ -83,8 +86,8 @@ class Sniffer():
 				            crypto.add("OPN")
 				'''
 			self.list_ap[pkt.addr2].incr_pkts()
-			pkt.show()
-			print("------------------------------------------------")
+			#pkt.show()
+			#print("------------------------------------------------")
 
 	def __callback_stop(self, param):
 		return not self.__active

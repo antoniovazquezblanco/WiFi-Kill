@@ -14,8 +14,10 @@ class AccessPoint:
 		self.essid = ssid
 
 	def set_channel(self, channel):
-		print("CH:"+str(channel))
 		self.channel = channel
+
+	def set_power(self, power):
+		self.power = power
 
 	def incr_pkts(self, incr=1):
 		self.packets = self.packets + 1
