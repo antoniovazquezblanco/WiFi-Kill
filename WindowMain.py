@@ -41,7 +41,7 @@ class WindowMain:
 		Gtk.main_quit(*args)
 
 	def window_main_toolbar_interfaces_clicked(self, button):
-		DialogInterfaces()
+		DialogInterfaces(self.window)
 
 	def window_main_networks_update_callback(self):
 		nets = self.sniffer_thread.get_networks()

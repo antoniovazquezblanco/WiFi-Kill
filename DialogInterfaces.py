@@ -8,13 +8,14 @@ from utils.WirelessInterface import WirelessInterface
 
 
 class DialogInterfaces:
-	def __init__(self):
+	def __init__(self, window):
 		builder = Gtk.Builder()
 		builder.add_from_file("DialogInterfaces.glade")
 		builder.connect_signals(self)
 		self.liststore = builder.get_object("dialog_interfaces_liststore")
 		self.treeview = builder.get_object("dialog_interfaces_treeview")
 		self.dialog = builder.get_object("dialog_interfaces")
+		self.dialog.set_transient_for(window)
 		self.interfaces_update()
 		self.dialog.run()
 		self.dialog.destroy()
