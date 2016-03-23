@@ -58,3 +58,6 @@ target/
 
 # Glade
 *.glade\~
+
+# Project specific
+captures/*
