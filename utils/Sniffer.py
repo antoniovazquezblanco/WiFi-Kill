@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import time
 import threading
 from utils.WirelessInterface import WirelessInterface
 from utils.AccessPoint import AccessPoint
@@ -31,6 +32,7 @@ class Sniffer():
 		if self.__thread is None or not self.__thread.is_alive():
 			print("[D] Sniffer start...")
 			self.__active = True
+			self.__pcapwriter = PcapWriter("captures/"+time.strftime("%Y_%m_%d_%H_%M_%S")+".pcap", append=True, sync=True)
 			self.__thread = threading.Thread(target=self.__sniff)
 			self.__thread.start()
 			return True
@@ -41,6 +43,7 @@ class Sniffer():
 			self.__active = False
 			print("[D] Sniffer stop...")
 			self.__thread.join()
+			self.__pcapwriter.close()
 			return True
 		return False
 
@@ -72,8 +75,9 @@ class Sniffer():
 				elif p.ID == Dot11Fields.Elt.DSset and p.len == 1:
 					self.list_ap[addr].set_channel(ord(p.info))
 				p = p.payload
-			pkt.show()
-			print("------------------------------------------------")
+			self.__pcapwriter.write(pkt)
+			#pkt.show()
+			#print("------------------------------------------------")
 
 	def __callback_stop(self, param):
 		return not self.__active
