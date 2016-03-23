@@ -19,6 +19,7 @@ class SystemChecks:
 	def post_test():
 		SystemChecks.__check_root()
 		SystemChecks.__check_modules()
+		SystemChecks.__check_folders()
 		SystemChecks.__check_binaries()
 		SystemChecks.__check_services()
 		SystemChecks.__check_processes()
@@ -34,6 +35,13 @@ class SystemChecks:
 			import scapy.all
 		except:
 			raise Exception("This program requires scapy python modules. Please install them.")
+
+	@staticmethod
+	def __check_folders():
+		folders = ["captures"]
+		for f in folders:
+			if not os.path.exists(f):
+				os.makedirs(f)
 
 	@staticmethod
 	def __check_binaries():

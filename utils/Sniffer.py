@@ -72,20 +72,6 @@ class Sniffer():
 				elif p.ID == Dot11Fields.Elt.DSset:
 					self.list_ap[addr].set_channel(ord(p.info))
 				p = p.payload
-				'''
-				TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-			         - Parse radiotap header for signal strenght information
-				 - WPS??????
-				elif p.ID == 48:
-			            crypto.add("WPA2")
-			        elif p.ID == 221 and p.info.startswith('\x00P\xf2\x01\x01\x00'):
-			            crypto.add("WPA")
-				if not crypto:
-			        	if 'privacy' in cap:
-			        	    crypto.add("WEP")
-			        	else:
-			        	    crypto.add("OPN")
-				'''
 			pkt.show()
 			print("------------------------------------------------")
 
