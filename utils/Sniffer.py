@@ -69,7 +69,7 @@ class Sniffer():
 			while p:
 				if p.ID == Dot11Fields.Elt.SSID:
 					self.list_ap[addr].set_ssid(p.info)
-				elif p.ID == Dot11Fields.Elt.DSset:
+				elif p.ID == Dot11Fields.Elt.DSset and p.len == 1:
 					self.list_ap[addr].set_channel(ord(p.info))
 				p = p.payload
 			pkt.show()
