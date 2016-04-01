@@ -10,7 +10,6 @@ from scapy.layers.dot11 import Dot11
 
 
 class Dot11Fields():
-
 	class Type():
 		Management = 0x00
 
@@ -62,6 +61,10 @@ class Sniffer():
 		sniff(prn=self.__callback_packet, stop_filter=self.__callback_stop)
 
 	def __callback_packet(self, pkt):
+		if pkt.haslayer(RadioTap):
+			# Radiotap version 0 with signal power information...
+			# Future versions of scapy will implement flag check in order to verify if signal data is present...
+			print("[D] Sniffer.__callbakc_packet: Radiotap power parse...")
 		if pkt.haslayer(Dot11) and pkt.type == Dot11Fields.Type.Management and pkt.subtype == Dot11Fields.SubType.Beacon:
 			# TODO: Why addr2 instead of addr3????
 			addr = pkt.addr2.upper()
